@@ -143,21 +143,33 @@ export default function Navbar() {
               {/* Dashboard + Profile */}
               <div className="hidden items-center gap-3 sm:flex">
 
-                {isStaff ? (
+                {isStaff && (
                   <Link
                     href="/dashboard"
-                    className="rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-md shadow-blue-600/20 transition hover:-translate-y-0.5 hover:bg-blue-700 hover:shadow-lg"
+                    onClick={closeMenus}
+                    className="block rounded-xl px-3 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-blue-50 hover:text-blue-700 dark:text-slate-200 dark:hover:bg-slate-800 dark:hover:text-blue-400"
                   >
                     Dashboard
                   </Link>
-                ) : (
+                )}
+
+                {!isStaff && (
                   <Link
                     href="/my-bookings"
-                    className="rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-md shadow-blue-600/20 transition hover:-translate-y-0.5 hover:bg-blue-700 hover:shadow-lg"
+                    onClick={closeMenus}
+                    className="block rounded-xl px-3 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-blue-50 hover:text-blue-700 dark:text-slate-200 dark:hover:bg-slate-800 dark:hover:text-blue-400"
                   >
                     My Bookings
                   </Link>
                 )}
+
+                {/* <Link
+                  href="/profile"
+                  onClick={closeMenus}
+                  className="block rounded-xl px-3 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-blue-50 hover:text-blue-700 dark:text-slate-200 dark:hover:bg-slate-800 dark:hover:text-blue-400"
+                >
+                  My Profile
+                </Link> */}
 
                 <button
                   onClick={() => setDropdownOpen(!dropdownOpen)}
@@ -218,38 +230,48 @@ export default function Navbar() {
 
                   <div className="p-2">
 
-                    {isStaff ? (
+                    {/* My Profile */}
+                    <Link
+                      href="/profile"
+                      onClick={closeMenus}
+                      className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-blue-50 hover:text-blue-700 dark:text-slate-200 dark:hover:bg-slate-800 dark:hover:text-blue-400"
+                    >
+                      <span className="text-lg">👤</span>
+                      My Profile
+                    </Link>
+
+                    {/* Dashboard */}
+                    {isStaff && (
                       <Link
-                        href="/dashbord"
+                        href="/dashboard"
                         onClick={closeMenus}
-                        className="block rounded-xl px-3 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-blue-50 hover:text-blue-700 dark:text-slate-200 dark:hover:bg-slate-800 dark:hover:text-blue-400"
+                        className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-blue-50 hover:text-blue-700 dark:text-slate-200 dark:hover:bg-slate-800 dark:hover:text-blue-400"
                       >
+                        <span className="text-lg">📊</span>
                         Dashboard
                       </Link>
-                    ) : (
-                      <>
-                        <Link
-                          href="/my-bookings"
-                          onClick={closeMenus}
-                          className="block rounded-xl px-3 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-blue-50 hover:text-blue-700 dark:text-slate-200 dark:hover:bg-slate-800 dark:hover:text-blue-400"
-                        >
-                          My Bookings
-                        </Link>
-
-                        <Link
-                          href="/profile"
-                          onClick={closeMenus}
-                          className="block rounded-xl px-3 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-blue-50 hover:text-blue-700 dark:text-slate-200 dark:hover:bg-slate-800 dark:hover:text-blue-400"
-                        >
-                          Profile
-                        </Link>
-                      </>
                     )}
 
+                    {/* My Bookings */}
+                    {!isStaff && (
+                      <Link
+                        href="/my-bookings"
+                        onClick={closeMenus}
+                        className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-blue-50 hover:text-blue-700 dark:text-slate-200 dark:hover:bg-slate-800 dark:hover:text-blue-400"
+                      >
+                        <span className="text-lg">📅</span>
+                        My Bookings
+                      </Link>
+                    )}
+
+                    <div className="my-2 border-t border-slate-100 dark:border-slate-700" />
+
+                    {/* Logout */}
                     <button
                       onClick={handleLogout}
-                      className="mt-1 w-full rounded-xl px-3 py-2.5 text-left text-sm font-semibold text-red-600 transition hover:bg-red-50 dark:hover:bg-red-950/40"
+                      className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm font-semibold text-red-600 transition hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-950/40"
                     >
+                      <span className="text-lg">🚪</span>
                       Logout
                     </button>
 
@@ -293,15 +315,17 @@ export default function Navbar() {
       </div>
 
       {/* Mobile Navigation */}
+      {/* Mobile Navigation */}
       {mobileMenuOpen && (
         <div className="border-t border-slate-200 bg-white px-4 py-4 shadow-lg dark:border-slate-700 dark:bg-slate-950 lg:hidden">
 
           <div className="mx-auto flex max-w-7xl flex-col gap-1">
 
+            {/* Public Navigation */}
             <Link
               href="/"
               onClick={closeMenus}
-              className="rounded-lg px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-blue-50 hover:text-blue-700 dark:text-slate-200 dark:hover:bg-slate-800 dark:hover:text-blue-400"
+              className="rounded-lg px-4 py-3 text-sm font-semibold text-slate-700 transition hover:bg-blue-50 hover:text-blue-700 dark:text-slate-200 dark:hover:bg-slate-800 dark:hover:text-blue-400"
             >
               Home
             </Link>
@@ -309,7 +333,7 @@ export default function Navbar() {
             <Link
               href="/studios"
               onClick={closeMenus}
-              className="rounded-lg px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-blue-50 hover:text-blue-700 dark:text-slate-200 dark:hover:bg-slate-800 dark:hover:text-blue-400"
+              className="rounded-lg px-4 py-3 text-sm font-semibold text-slate-700 transition hover:bg-blue-50 hover:text-blue-700 dark:text-slate-200 dark:hover:bg-slate-800 dark:hover:text-blue-400"
             >
               Explore Studios
             </Link>
@@ -317,7 +341,7 @@ export default function Navbar() {
             <Link
               href="/#how-it-works"
               onClick={closeMenus}
-              className="rounded-lg px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-blue-50 hover:text-blue-700 dark:text-slate-200 dark:hover:bg-slate-800 dark:hover:text-blue-400"
+              className="rounded-lg px-4 py-3 text-sm font-semibold text-slate-700 transition hover:bg-blue-50 hover:text-blue-700 dark:text-slate-200 dark:hover:bg-slate-800 dark:hover:text-blue-400"
             >
               How It Works
             </Link>
@@ -325,67 +349,89 @@ export default function Navbar() {
             <Link
               href="/#about"
               onClick={closeMenus}
-              className="rounded-lg px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-blue-50 hover:text-blue-700 dark:text-slate-200 dark:hover:bg-slate-800 dark:hover:text-blue-400"
+              className="rounded-lg px-4 py-3 text-sm font-semibold text-slate-700 transition hover:bg-blue-50 hover:text-blue-700 dark:text-slate-200 dark:hover:bg-slate-800 dark:hover:text-blue-400"
             >
               About Us
             </Link>
 
+            {/* Logged In User */}
             {user ? (
               <>
-                {isStaff ? (
-                  <Link
-                    href="/dashbord"
-                    onClick={closeMenus}
-                    className="mt-2 rounded-xl bg-blue-600 px-4 py-3 text-center text-sm font-semibold text-white hover:bg-blue-700"
-                  >
-                    Dashboard
-                  </Link>
-                ) : (
-                  <>
-                    <Link
-                      href="/my-bookings"
-                      onClick={closeMenus}
-                      className="mt-2 rounded-xl bg-blue-600 px-4 py-3 text-center text-sm font-semibold text-white hover:bg-blue-700"
-                    >
-                      My Bookings
-                    </Link>
+                <div className="my-3 border-t border-slate-200 dark:border-slate-700" />
 
-                    <Link
-                      href="/profile"
-                      onClick={closeMenus}
-                      className="rounded-xl px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-blue-50 hover:text-blue-700 dark:text-slate-200 dark:hover:bg-slate-800 dark:hover:text-blue-400"
-                    >
-                      Profile
-                    </Link>
-                  </>
-                )}
+                {/* User Information */}
+                <div className="flex items-center gap-3 rounded-xl bg-slate-50 p-3 dark:bg-slate-900">
 
-                <div className="mt-3 border-t border-slate-200 pt-3 dark:border-slate-700">
+                  {user.image ? (
+                    <img
+                      src={user.image}
+                      alt="Profile"
+                      className="h-11 w-11 rounded-full border-2 border-blue-100 object-cover dark:border-slate-700"
+                    />
+                  ) : (
+                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-blue-100 text-lg font-bold text-blue-700 dark:bg-blue-500/20 dark:text-blue-400">
+                      {user.name?.charAt(0).toUpperCase() || "U"}
+                    </div>
+                  )}
 
-                  <p className="px-3 text-sm font-bold text-slate-800 dark:text-white">
-                    {user.name}
-                  </p>
+                  <div className="min-w-0">
+                    <p className="truncate text-sm font-bold text-slate-800 dark:text-white">
+                      {user.name}
+                    </p>
 
-                  <p className="break-all px-3 text-xs text-slate-500 dark:text-slate-400">
-                    {user.email}
-                  </p>
-
-                  <button
-                    onClick={handleLogout}
-                    className="mt-2 w-full rounded-lg px-3 py-3 text-left text-sm font-semibold text-red-600 hover:bg-red-50 dark:hover:bg-red-950/40"
-                  >
-                    Logout
-                  </button>
+                    <p className="break-all text-xs text-slate-500 dark:text-slate-400">
+                      {user.email}
+                    </p>
+                  </div>
 
                 </div>
+
+                {/* Dashboard / My Bookings */}
+                {isStaff ? (
+                  <Link
+                    href="/dashboard"
+                    onClick={closeMenus}
+                    className="mt-2 flex items-center gap-3 rounded-xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-blue-700"
+                  >
+                    📊 Dashboard
+                  </Link>
+                ) : (
+                  <Link
+                    href="/my-bookings"
+                    onClick={closeMenus}
+                    className="mt-2 flex items-center gap-3 rounded-xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-blue-700"
+                  >
+                    📅 My Bookings
+                  </Link>
+                )}
+
+                {/* My Profile - Everyone */}
+                <Link
+                  href="/profile"
+                  onClick={closeMenus}
+                  className="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold text-slate-700 transition hover:bg-blue-50 hover:text-blue-700 dark:text-slate-200 dark:hover:bg-slate-800 dark:hover:text-blue-400"
+                >
+                  👤 My Profile
+                </Link>
+
+                {/* Logout */}
+                <button
+                  onClick={handleLogout}
+                  className="mt-2 flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left text-sm font-semibold text-red-600 transition hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-950/40"
+                >
+                  🚪 Logout
+                </button>
+
               </>
             ) : (
+
+              /* Guest Navigation */
               <div className="mt-3 grid grid-cols-2 gap-3 border-t border-slate-200 pt-4 dark:border-slate-700">
 
                 <Link
                   href="/login"
                   onClick={closeMenus}
-                  className="rounded-xl border border-blue-600 px-4 py-3 text-center text-sm font-semibold text-blue-600"
+                  className="rounded-xl border border-blue-600 px-4 py-3 text-center text-sm font-semibold text-blue-600 transition hover:bg-blue-50 dark:hover:bg-blue-950/40"
                 >
                   Login
                 </Link>
@@ -393,7 +439,7 @@ export default function Navbar() {
                 <Link
                   href="/register"
                   onClick={closeMenus}
-                  className="rounded-xl bg-blue-600 px-4 py-3 text-center text-sm font-semibold text-white"
+                  className="rounded-xl bg-blue-600 px-4 py-3 text-center text-sm font-semibold text-white transition hover:bg-blue-700"
                 >
                   Register
                 </Link>
@@ -404,7 +450,6 @@ export default function Navbar() {
           </div>
         </div>
       )}
-
     </nav>
   );
 }

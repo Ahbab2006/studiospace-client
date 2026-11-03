@@ -351,19 +351,49 @@ export default function DashboardPage() {
                     </p>
                 )}
 
-                <section>
-                    <h1 className="text-3xl font-bold text-gray-900">
-                        Admin Dashboard
-                    </h1>
+<section className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition-colors duration-300 dark:border-slate-700 dark:bg-slate-900 sm:p-8">
+    <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
 
-                    <p className="mt-2 text-gray-600">
-                        Welcome back, {dashboard.admin.name}!
-                    </p>
+        {/* Welcome Content */}
+        <div>
+            <span className="mb-3 inline-flex items-center rounded-full bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-600 dark:bg-blue-500/10 dark:text-blue-400">
+                ✨ Admin Panel
+            </span>
 
-                    <p className="text-sm text-gray-500">
-                        {dashboard.admin.email} · {dashboard.admin.role}
-                    </p>
-                </section>
+            <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-3xl">
+                Admin Dashboard
+            </h1>
+
+            <p className="mt-2 text-sm text-gray-600 dark:text-slate-300 sm:text-base">
+                Welcome back,{" "}
+                <span className="font-semibold text-blue-600 dark:text-blue-400">
+                    {dashboard.admin.name}
+                </span>
+                ! 👋
+            </p>
+
+            <p className="mt-2 text-sm text-gray-500 dark:text-slate-400">
+                Manage your platform, monitor activities, and keep everything running smoothly.
+            </p>
+        </div>
+
+        {/* Admin Information */}
+        <div className="rounded-xl border border-gray-100 bg-gray-50 px-4 py-3 dark:border-slate-700 dark:bg-slate-800">
+            <p className="text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-slate-400">
+                Logged in as
+            </p>
+
+            <p className="mt-1 break-all text-sm font-semibold text-gray-800 dark:text-white">
+                {dashboard.admin.email}
+            </p>
+
+            <span className="mt-2 inline-flex rounded-full bg-green-100 px-3 py-1 text-xs font-semibold capitalize text-green-700 dark:bg-green-500/10 dark:text-green-400">
+                {dashboard.admin.role}
+            </span>
+        </div>
+
+    </div>
+</section>
 
                 <section className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
                     {cards.map((card) => (
