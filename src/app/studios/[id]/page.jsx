@@ -18,9 +18,9 @@ function StudioDetailsContent() {
   useEffect(() => {
     const fetchStudio = async () => {
       try {
-        const response = await fetch(
-          `http://localhost:5000/api/studios/${id}`
-        );
+       const response = await fetch(
+  `${process.env.NEXT_PUBLIC_API_URL}/studios/${id}`
+);
 
         const result = await response.json();
 

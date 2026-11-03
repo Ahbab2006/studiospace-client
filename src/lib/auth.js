@@ -11,6 +11,12 @@ export const auth = betterAuth({
   baseURL: process.env.BETTER_AUTH_URL,
   secret: process.env.BETTER_AUTH_SECRET,
 
+
+  trustedOrigins: [
+    "http://localhost:3000",
+    "https://studiospace-client-9p5k.vercel.app",
+  ],
+
   emailAndPassword: {
     enabled: true,
     minPasswordLength: 6,
