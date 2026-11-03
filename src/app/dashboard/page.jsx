@@ -13,7 +13,7 @@ export default function DashboardPage() {
 
 
     const [successMessage, setSuccessMessage] = useState("");
-const [actionError, setActionError] = useState("");
+    const [actionError, setActionError] = useState("");
 
     const [users, setUsers] = useState([]);
     const [usersLoading, setUsersLoading] = useState(false);
@@ -26,7 +26,7 @@ const [actionError, setActionError] = useState("");
     const [selectedUser, setSelectedUser] = useState(null);
 
 
-    
+
     const [selectedPermissions, setSelectedPermissions] = useState({
         manageStudios: false,
         manageBookings: false,
@@ -369,10 +369,13 @@ const [actionError, setActionError] = useState("");
                     {cards.map((card) => (
                         <div
                             key={card.title}
-                            className="rounded-xl bg-white p-6 shadow-sm"
+                            className="rounded-xl border border-gray-100 bg-white p-6 shadow-sm transition-all duration-300 hover:shadow-md dark:border-slate-700 dark:bg-slate-900"
                         >
-                            <p className="text-sm text-gray-500">{card.title}</p>
-                            <h2 className="mt-3 text-2xl font-bold text-gray-900">
+                            <p className="text-sm font-medium text-gray-500 dark:text-slate-400">
+                                {card.title}
+                            </p>
+
+                            <h2 className="mt-3 text-2xl font-bold text-gray-900 dark:text-white">
                                 {card.value}
                             </h2>
                         </div>
@@ -468,14 +471,14 @@ const [actionError, setActionError] = useState("");
                 </section>
 
                 {permissions.manageBookings && (
-                    <section className="rounded-xl bg-white p-6 shadow-sm">
+                    <section className="rounded-xl border border-gray-100 bg-white p-6 shadow-sm transition-colors duration-300 dark:border-slate-700 dark:bg-slate-900">
                         <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
                             <div>
-                                <h2 className="text-xl font-bold text-gray-900">
+                                <h2 className="text-xl font-bold text-gray-900 dark:text-white">
                                     Booking Management
                                 </h2>
 
-                                <p className="text-sm text-gray-500">
+                                <p className="text-sm text-gray-500 dark:text-slate-400">
                                     View and manage all customer bookings.
                                 </p>
                             </div>
@@ -628,8 +631,8 @@ const [actionError, setActionError] = useState("");
 
 
                 {permissions.manageUsers && (
-                    <section className="rounded-xl bg-white p-6 shadow-sm">
-                        <div className="mb-5">
+                    <section className="rounded-xl border border-gray-100 bg-white p-6 shadow-sm transition-colors duration-300 dark:border-slate-700 dark:bg-slate-900">
+                        <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
                             {/* <h2 className="text-xl font-bold text-gray-900">
                                 User Management
                             </h2>
@@ -637,11 +640,11 @@ const [actionError, setActionError] = useState("");
                                 Manage users and promote them to Sub-admin.
                             </p> */}
                             <div className="mb-5">
-                                <h2 className="text-xl font-bold text-gray-900">
+                                <h2 className="text-xl font-bold text-gray-900 dark:text-white">
                                     User Management
                                 </h2>
 
-                                <p className="text-sm text-gray-500">
+                                <p className="text-sm text-gray-500 dark:text-slate-400">
                                     Manage users and promote them to Sub-admin.
                                 </p>
 
