@@ -630,12 +630,12 @@ const [actionError, setActionError] = useState("");
                 {permissions.manageUsers && (
                     <section className="rounded-xl bg-white p-6 shadow-sm">
                         <div className="mb-5">
-                            <h2 className="text-xl font-bold text-gray-900">
+                            {/* <h2 className="text-xl font-bold text-gray-900">
                                 User Management
                             </h2>
                             <p className="text-sm text-gray-500">
                                 Manage users and promote them to Sub-admin.
-                            </p>
+                            </p> */}
                             <div className="mb-5">
                                 <h2 className="text-xl font-bold text-gray-900">
                                     User Management
