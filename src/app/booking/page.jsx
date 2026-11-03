@@ -107,51 +107,26 @@ function BookingForm() {
 
     try {
       // Step 1: Authentication
-      const authResponse = await fetch(
-        "/api/backend-auth/token",
-        {
-          method: "POST",
-          credentials: "include",
-        }
-      );
 
-      const authData = await authResponse.json();
+const response = await fetch("/api/bookings", {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+        studioId,
+        bookingDate,
+        startTime,
+        endTime,
+    }),
+});
 
-      if (!authResponse.ok || !authData.success) {
-        throw new Error(
-          "Authentication failed. Please login again."
-        );
-      }
+const result = await response.json();
 
-      // Step 2: Create Booking
-      const API_URL =
-        process.env.NEXT_PUBLIC_API_URL ||
-        "http://localhost:5000/api";
+if (!response.ok || !result.success) {
+    throw new Error(result.message || "Booking failed.");
+}
 
-      const response = await fetch(
-        `${API_URL}/bookings`,
-        {
-          method: "POST",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            studioId,
-            bookingDate,
-            startTime,
-            endTime,
-          }),
-        }
-      );
-
-      const result = await response.json();
-
-      if (!response.ok || !result.success) {
-        throw new Error(
-          result.message || "Booking failed."
-        );
-      }
 
       // Success
       setMessage(
