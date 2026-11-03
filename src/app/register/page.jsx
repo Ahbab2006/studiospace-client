@@ -1,9 +1,11 @@
+
 "use client";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { authClient } from "@/lib/auth-client";
+import { toast } from "react-toastify";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -15,7 +17,6 @@ export default function RegisterPage() {
     password: "",
   });
 
-  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
@@ -27,22 +28,21 @@ export default function RegisterPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
 
     const { name, email, image, password } = formData;
 
     if (!/[A-Z]/.test(password)) {
-      setError("Password must contain an uppercase letter.");
+      toast.error("Password must contain an uppercase letter.");
       return;
     }
 
     if (!/[a-z]/.test(password)) {
-      setError("Password must contain a lowercase letter.");
+      toast.error("Password must contain a lowercase letter.");
       return;
     }
 
     if (password.length < 6) {
-      setError("Password must be at least 6 characters long.");
+      toast.error("Password must be at least 6 characters long.");
       return;
     }
 
@@ -58,37 +58,44 @@ export default function RegisterPage() {
         });
 
       if (authError) {
-        setError(authError.message || "Registration failed.");
+        toast.error(authError.message || "Registration failed.");
         return;
       }
 
       if (data) {
+        toast.success("Account created successfully!");
+
         router.push("/");
         router.refresh();
       }
     } catch (err) {
-      setError(err.message || "Something went wrong.");
+      toast.error(err.message || "Something went wrong.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-gray-50 px-4 py-10">
-      <div className="w-full max-w-md rounded-2xl bg-white p-8 shadow-lg">
-        <h1 className="mb-2 text-center text-3xl font-bold text-gray-900">
-          Create Account
-        </h1>
+    <main className="flex min-h-screen items-center justify-center bg-gray-50 px-4 py-10 transition-colors duration-300 dark:bg-slate-950">
+      <div className="w-full max-w-md rounded-2xl border border-gray-100 bg-white p-8 shadow-xl dark:border-slate-800 dark:bg-slate-900">
+        {/* Header */}
+        <div className="mb-7 text-center">
+          <h1 className="mb-2 text-3xl font-bold text-gray-900 dark:text-white">
+            Create Account
+          </h1>
 
-        <p className="mb-6 text-center text-gray-500">
-          Join StudioSpace and discover creative workspaces.
-        </p>
+          <p className="text-sm text-gray-500 dark:text-slate-400">
+            Join StudioSpace and discover creative workspaces.
+          </p>
+        </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        {/* Register Form */}
+        <form onSubmit={handleSubmit} className="space-y-5">
+          {/* Name */}
           <div>
             <label
               htmlFor="name"
-              className="mb-1 block text-sm font-medium text-gray-700"
+              className="mb-2 block text-sm font-medium text-gray-700 dark:text-slate-300"
             >
               Full Name
             </label>
@@ -102,14 +109,15 @@ export default function RegisterPage() {
               value={formData.name}
               onChange={handleChange}
               required
-              className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-blue-500"
+              className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:border-slate-700 dark:bg-slate-800 dark:text-white dark:placeholder:text-slate-500"
             />
           </div>
 
+          {/* Email */}
           <div>
             <label
               htmlFor="email"
-              className="mb-1 block text-sm font-medium text-gray-700"
+              className="mb-2 block text-sm font-medium text-gray-700 dark:text-slate-300"
             >
               Email Address
             </label>
@@ -123,14 +131,15 @@ export default function RegisterPage() {
               value={formData.email}
               onChange={handleChange}
               required
-              className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-blue-500"
+              className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:border-slate-700 dark:bg-slate-800 dark:text-white dark:placeholder:text-slate-500"
             />
           </div>
 
+          {/* Image URL */}
           <div>
             <label
               htmlFor="image"
-              className="mb-1 block text-sm font-medium text-gray-700"
+              className="mb-2 block text-sm font-medium text-gray-700 dark:text-slate-300"
             >
               Photo URL (Optional)
             </label>
@@ -142,14 +151,15 @@ export default function RegisterPage() {
               placeholder="https://example.com/photo.jpg"
               value={formData.image}
               onChange={handleChange}
-              className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-blue-500"
+              className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:border-slate-700 dark:bg-slate-800 dark:text-white dark:placeholder:text-slate-500"
             />
           </div>
 
+          {/* Password */}
           <div>
             <label
               htmlFor="password"
-              className="mb-1 block text-sm font-medium text-gray-700"
+              className="mb-2 block text-sm font-medium text-gray-700 dark:text-slate-300"
             >
               Password
             </label>
@@ -164,23 +174,15 @@ export default function RegisterPage() {
               onChange={handleChange}
               required
               minLength={6}
-              className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-blue-500"
+              className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:border-slate-700 dark:bg-slate-800 dark:text-white dark:placeholder:text-slate-500"
             />
 
-            <p className="mt-1 text-xs text-gray-500">
+            <p className="mt-2 text-xs text-gray-500 dark:text-slate-400">
               Include at least one uppercase and one lowercase letter.
             </p>
           </div>
 
-          {error && (
-            <p
-              role="alert"
-              className="rounded-lg bg-red-50 p-3 text-sm text-red-700"
-            >
-              {error}
-            </p>
-          )}
-
+          {/* Submit Button */}
           <button
             type="submit"
             disabled={loading}
@@ -190,14 +192,20 @@ export default function RegisterPage() {
           </button>
         </form>
 
-        <p className="mt-6 text-center text-sm text-gray-600">
+        {/* Login Link */}
+        <p className="mt-6 text-center text-sm text-gray-600 dark:text-slate-400">
           Already have an account?{" "}
           <Link
             href="/login"
-            className="font-semibold text-blue-600 hover:underline"
+            className="font-semibold text-blue-600 transition hover:text-blue-700 hover:underline dark:text-blue-400"
           >
             Login
           </Link>
+        </p>
+
+        {/* Footer */}
+        <p className="mt-6 text-center text-xs text-gray-400 dark:text-slate-500">
+          © 2026 StudioSpace. All rights reserved.
         </p>
       </div>
     </main>
