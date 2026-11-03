@@ -145,7 +145,7 @@ export default function Navbar() {
 
                 {isStaff ? (
                   <Link
-                    href="/dashbord"
+                    href="/dashboard"
                     className="rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-md shadow-blue-600/20 transition hover:-translate-y-0.5 hover:bg-blue-700 hover:shadow-lg"
                   >
                     Dashboard

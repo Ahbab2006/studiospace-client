@@ -11,6 +11,10 @@ export default function DashboardPage() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
 
+
+    const [successMessage, setSuccessMessage] = useState("");
+const [actionError, setActionError] = useState("");
+
     const [users, setUsers] = useState([]);
     const [usersLoading, setUsersLoading] = useState(false);
     const [promotingId, setPromotingId] = useState(null);
@@ -21,6 +25,8 @@ export default function DashboardPage() {
 
     const [selectedUser, setSelectedUser] = useState(null);
 
+
+    
     const [selectedPermissions, setSelectedPermissions] = useState({
         manageStudios: false,
         manageBookings: false,
@@ -32,38 +38,38 @@ export default function DashboardPage() {
     // const [successMessage, setSuccessMessage] = useState("");
     // const [actionError, setActionError] = useState("");
 
-const fetchUsers = async () => {
-    try {
-        setUsersLoading(true);
+    const fetchUsers = async () => {
+        try {
+            setUsersLoading(true);
 
-        const tokenData = await authClient.token();
-        const token = tokenData?.data?.token || tokenData?.token;
+            const tokenData = await authClient.token();
+            const token = tokenData?.data?.token || tokenData?.token;
 
-        if (!token) {
-            throw new Error("Authentication token not found.");
+            if (!token) {
+                throw new Error("Authentication token not found.");
+            }
+
+            const response = await fetch(`${API_URL}/admin/users`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+
+            const result = await response.json();
+
+            if (!response.ok || !result.success) {
+                throw new Error(result.message || "Failed to fetch users.");
+            }
+
+            setUsers(result.data);
+            toast.success("Users loaded successfully!");
+        } catch (error) {
+            console.error("Fetch users error:", error);
+            toast.error(error.message || "Failed to load users.");
+        } finally {
+            setUsersLoading(false);
         }
-
-        const response = await fetch(`${API_URL}/admin/users`, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        });
-
-        const result = await response.json();
-
-        if (!response.ok || !result.success) {
-            throw new Error(result.message || "Failed to fetch users.");
-        }
-
-        setUsers(result.data);
-        toast.success("Users loaded successfully!");
-    } catch (error) {
-        console.error("Fetch users error:", error);
-        toast.error(error.message || "Failed to load users.");
-    } finally {
-        setUsersLoading(false);
-    }
-};
+    };
 
 
     const fetchBookings = async () => {
@@ -111,9 +117,9 @@ const fetchUsers = async () => {
             }
 
             const response = await fetch(
-                
+
                 `${API_URL}/bookings/${bookingId}/status`,
-                
+
                 {
                     method: "PATCH",
                     headers: {
@@ -122,7 +128,7 @@ const fetchUsers = async () => {
                     },
                     body: JSON.stringify({ status }),
                 }
-                
+
             );
 
             const result = await response.json();
@@ -134,15 +140,15 @@ const fetchUsers = async () => {
             }
 
             // Refresh booking list after successful update
-           await fetchBookings();
+            await fetchBookings();
 
-toast.success(`Booking ${status} successfully!`);
+            toast.success(`Booking ${status} successfully!`);
 
-       } catch (error) {
-    console.error("Booking status update error:", error);
-    setBookingsError(error.message);
-    toast.error(error.message || "Failed to update booking status.");
-}
+        } catch (error) {
+            console.error("Booking status update error:", error);
+            setBookingsError(error.message);
+            toast.error(error.message || "Failed to update booking status.");
+        }
     };
 
 
@@ -446,7 +452,7 @@ toast.success(`Booking ${status} successfully!`);
                                     {dashboard.recentBookings.map((booking) => (
                                         <tr
                                             key={booking._id}
-                                           className="border-b border-gray-200 transition-colors last:border-0 hover:bg-gray-50 dark:border-slate-700 dark:hover:bg-slate-800/60"
+                                            className="border-b border-gray-200 transition-colors last:border-0 hover:bg-gray-50 dark:border-slate-700 dark:hover:bg-slate-800/60"
                                         >
                                             <td className="p-3">{booking.studioTitle}</td>
                                             <td className="p-3">{booking.userEmail}</td>
