@@ -18,16 +18,16 @@ export default function LoginPage() {
 
 
   const getRedirectPath = () => {
-  const params = new URLSearchParams(window.location.search);
-  const redirect = params.get("redirect");
+    const params = new URLSearchParams(window.location.search);
+    const redirect = params.get("redirect");
 
-  // Only allow internal application routes
-  if (redirect?.startsWith("/") && !redirect.startsWith("//")) {
-    return redirect;
-  }
+    // Only allow internal application routes
+    if (redirect?.startsWith("/") && !redirect.startsWith("//")) {
+      return redirect;
+    }
 
-  return "/";
-};
+    return "/";
+  };
 
 
 
@@ -60,16 +60,16 @@ export default function LoginPage() {
         return;
       }
 
- if (data) {
-  await authClient.getSession();
+      if (data) {
+        await authClient.getSession();
 
-  toast.success("Login successful! Welcome to StudioSpace.");
+        toast.success("Login successful! Welcome to StudioSpace.");
 
-  const redirectPath = getRedirectPath();
+        const redirectPath = getRedirectPath();
 
-  router.replace(redirectPath);
-  router.refresh();
-}
+        router.replace(redirectPath);
+        router.refresh();
+      }
     } catch (err) {
       toast.error(err.message || "Something went wrong.");
     } finally {
@@ -77,19 +77,34 @@ export default function LoginPage() {
     }
   };
 
-  const handleGoogleLogin = async () => {
-    try {
-      setGoogleLoading(true);
 
-    await authClient.signIn.social({
-  provider: "google",
-  callbackURL: getRedirectPath(),
-});
-    } catch (err) {
-      toast.error(err.message || "Google login failed.");
+const handleGoogleLogin = async () => {
+  try {
+    setGoogleLoading(true);
+
+    const result = await authClient.signIn.social({
+      provider: "google",
+      callbackURL: getRedirectPath(),
+      errorCallbackURL: "/login",
+    });
+
+    console.log("Google Login Result:", result);
+
+    if (result.error) {
+      toast.error(
+        result.error.message || "Google login failed."
+      );
       setGoogleLoading(false);
+      return;
     }
-  };
+
+  } catch (err) {
+    console.error("Google Login Error:", err);
+    toast.error(err.message || "Google login failed.");
+    setGoogleLoading(false);
+  }
+};
+
 
   const inputClass =
     "w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 dark:border-slate-700 dark:bg-slate-800 dark:text-white dark:placeholder:text-slate-500 dark:focus:border-indigo-400 dark:focus:ring-indigo-500/20";
@@ -207,9 +222,9 @@ export default function LoginPage() {
           </Link>
         </p>
 
-       <p className="mt-6 text-center text-xs text-gray-400 dark:text-slate-500">
-  © 2026 StudioSpace. All rights reserved.
-</p>
+        <p className="mt-6 text-center text-xs text-gray-400 dark:text-slate-500">
+          © 2026 StudioSpace. All rights reserved.
+        </p>
       </div>
     </main>
   );
