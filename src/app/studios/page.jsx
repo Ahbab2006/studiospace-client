@@ -19,20 +19,20 @@ export default function StudiosPage() {
 
   const router = useRouter();
 
-const { data: session, isPending } = authClient.useSession();
+  const { data: session, isPending } = authClient.useSession();
 
-const handleBookNow = (studio) => {
-  const bookingUrl = `/booking?studioId=${studio._id}&hourlyRate=${studio.hourlyRate}`;
+  const handleBookNow = (studio) => {
+    const bookingUrl = `/booking?studioId=${studio._id}&hourlyRate=${studio.hourlyRate}`;
 
-  if (isPending) return;
+    if (isPending) return;
 
-  if (!session?.user) {
-    router.push(`/login?redirect=${encodeURIComponent(bookingUrl)}`);
-    return;
-  }
+    if (!session?.user) {
+      router.push(`/login?redirect=${encodeURIComponent(bookingUrl)}`);
+      return;
+    }
 
-  router.push(bookingUrl);
-};
+    router.push(bookingUrl);
+  };
 
 
 
@@ -95,16 +95,16 @@ const handleBookNow = (studio) => {
 
 
 
-// console.log("Selected:", category);
-// console.log(
-//   "Filtered:",
-//   studios
-//     .filter((studio) => studio.category === category)
-//     .map((studio) => ({
-//       title: studio.title,
-//       category: studio.category,
-//     }))
-// );
+  // console.log("Selected:", category);
+  // console.log(
+  //   "Filtered:",
+  //   studios
+  //     .filter((studio) => studio.category === category)
+  //     .map((studio) => ({
+  //       title: studio.title,
+  //       category: studio.category,
+  //     }))
+  // );
 
 
 
@@ -171,12 +171,6 @@ const handleBookNow = (studio) => {
           </select>
         </div>
 
-        {/* No Studios Found */}
-
-        {/* <p className="mb-4 text-sm text-blue-600 dark:text-blue-400">
-  Selected: {category} | Showing {filteredStudios.length} of {studios.length} studios
-</p> */}
-
         {filteredStudios.length === 0 ? (
           <div className="rounded-2xl border border-gray-200 bg-white py-16 text-center shadow-sm dark:border-slate-800 dark:bg-slate-900">
             <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-blue-50 text-3xl dark:bg-blue-500/10">
@@ -239,14 +233,14 @@ const handleBookNow = (studio) => {
                       View Details
                     </Link>
 
-                 <button
-  type="button"
-  onClick={() => handleBookNow(studio)}
-  disabled={isPending}
-  className="flex-1 rounded-xl bg-blue-600 px-3 py-2.5 text-center text-sm font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
->
-  {isPending ? "Checking..." : "Book Now"}
-</button>
+                    <button
+                      type="button"
+                      onClick={() => handleBookNow(studio)}
+                      disabled={isPending}
+                      className="flex-1 rounded-xl bg-blue-600 px-3 py-2.5 text-center text-sm font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
+                    >
+                      {isPending ? "Checking..." : "Book Now"}
+                    </button>
                   </div>
                 </div>
               </article>

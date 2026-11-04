@@ -162,7 +162,6 @@ export default function Navbar() {
               {/* Desktop User Menu */}
               <div className="hidden items-center gap-3 sm:flex">
 
-                {/* Dashboard - Admin & Sub-admin */}
                 {/* {isStaff && (
                   <Link
                     href="/dashboard"
@@ -173,7 +172,6 @@ export default function Navbar() {
                   </Link>
                 )} */}
 
-                {/* My Bookings - Normal User */}
                 {!isStaff && (
                   <Link
                     href="/my-bookings"
