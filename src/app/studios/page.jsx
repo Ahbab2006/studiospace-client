@@ -3,6 +3,8 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { authClient } from "@/lib/auth-client";
 
 export default function StudiosPage() {
   const [studios, setStudios] = useState([]);
@@ -11,6 +13,27 @@ export default function StudiosPage() {
 
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("All");
+
+
+
+
+  const router = useRouter();
+
+const { data: session, isPending } = authClient.useSession();
+
+const handleBookNow = (studio) => {
+  const bookingUrl = `/booking?studioId=${studio._id}&hourlyRate=${studio.hourlyRate}`;
+
+  if (isPending) return;
+
+  if (!session?.user) {
+    router.push(`/login?redirect=${encodeURIComponent(bookingUrl)}`);
+    return;
+  }
+
+  router.push(bookingUrl);
+};
+
 
 
   useEffect(() => {
@@ -216,12 +239,14 @@ export default function StudiosPage() {
                       View Details
                     </Link>
 
-                    <Link
-                      href={`/booking?studioId=${studio._id}&hourlyRate=${studio.hourlyRate}`}
-                      className="flex-1 rounded-xl bg-blue-600 px-3 py-2.5 text-center text-sm font-semibold text-white transition hover:bg-blue-700"
-                    >
-                      Book Now
-                    </Link>
+                 <button
+  type="button"
+  onClick={() => handleBookNow(studio)}
+  disabled={isPending}
+  className="flex-1 rounded-xl bg-blue-600 px-3 py-2.5 text-center text-sm font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
+>
+  {isPending ? "Checking..." : "Book Now"}
+</button>
                   </div>
                 </div>
               </article>

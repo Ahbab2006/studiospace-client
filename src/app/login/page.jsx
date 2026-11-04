@@ -15,6 +15,23 @@ export default function LoginPage() {
     password: "",
   });
 
+
+
+  const getRedirectPath = () => {
+  const params = new URLSearchParams(window.location.search);
+  const redirect = params.get("redirect");
+
+  // Only allow internal application routes
+  if (redirect?.startsWith("/") && !redirect.startsWith("//")) {
+    return redirect;
+  }
+
+  return "/";
+};
+
+
+
+
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
 
@@ -43,14 +60,16 @@ export default function LoginPage() {
         return;
       }
 
-      if (data) {
-        await authClient.getSession();
+ if (data) {
+  await authClient.getSession();
 
-        toast.success("Login successful! Welcome to StudioSpace.");
+  toast.success("Login successful! Welcome to StudioSpace.");
 
-        router.push("/");
-        router.refresh();
-      }
+  const redirectPath = getRedirectPath();
+
+  router.replace(redirectPath);
+  router.refresh();
+}
     } catch (err) {
       toast.error(err.message || "Something went wrong.");
     } finally {
@@ -62,10 +81,10 @@ export default function LoginPage() {
     try {
       setGoogleLoading(true);
 
-      await authClient.signIn.social({
-        provider: "google",
-        callbackURL: "/",
-      });
+    await authClient.signIn.social({
+  provider: "google",
+  callbackURL: getRedirectPath(),
+});
     } catch (err) {
       toast.error(err.message || "Google login failed.");
       setGoogleLoading(false);

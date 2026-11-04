@@ -5,9 +5,13 @@ import { Suspense, useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
+import { authClient } from "@/lib/auth-client";
+
 
 function BookingForm() {
   const searchParams = useSearchParams();
+
+  const { data: session, isPending } = authClient.useSession();
 
   // States
   const [studioId, setStudioId] = useState("");
@@ -36,6 +40,22 @@ function BookingForm() {
       setHourlyRate(Number(rate));
     }
   }, [searchParams]);
+
+
+
+  useEffect(() => {
+  if (isPending) return;
+
+  if (!session?.user) {
+    const currentUrl =
+      window.location.pathname + window.location.search;
+
+    router.replace(
+      `/login?redirect=${encodeURIComponent(currentUrl)}`
+    );
+  }
+}, [session, isPending, router]);
+
 
   // Convert time to minutes
   const startMinutes = startTime
@@ -142,6 +162,18 @@ try {
   setLoading(false);
 }
   };
+
+
+
+  if (isPending || !session?.user) {
+  return (
+    <main className="flex min-h-[70vh] items-center justify-center">
+      <p className="font-medium text-slate-600 dark:text-slate-300">
+        Checking authentication...
+      </p>
+    </main>
+  );
+}
 
   return (
     <main className="min-h-screen bg-slate-50 px-4 py-12 transition-colors duration-300 dark:bg-slate-950 sm:px-6">
