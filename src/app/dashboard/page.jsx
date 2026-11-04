@@ -784,8 +784,6 @@ export default function DashboardPage() {
                                         </div>
                                     )}
 
-
-
                                     <tbody>
                                         {users.map((user) => (
                                             <tr key={user._id} className="border-b">

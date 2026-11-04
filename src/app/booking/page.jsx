@@ -1,4 +1,3 @@
-
 "use client";
 
 import { Suspense, useState, useEffect } from "react";
@@ -7,13 +6,11 @@ import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { authClient } from "@/lib/auth-client";
 
-
 function BookingForm() {
   const searchParams = useSearchParams();
 
   const { data: session, isPending } = authClient.useSession();
 
-  // States
   const [studioId, setStudioId] = useState("");
   const [hourlyRate, setHourlyRate] = useState(0);
 
@@ -40,7 +37,6 @@ function BookingForm() {
       setHourlyRate(Number(rate));
     }
   }, [searchParams]);
-
 
 
   useEffect(() => {
@@ -162,8 +158,6 @@ try {
   setLoading(false);
 }
   };
-
-
 
   if (isPending || !session?.user) {
   return (

@@ -163,7 +163,7 @@ export default function Navbar() {
               <div className="hidden items-center gap-3 sm:flex">
 
                 {/* Dashboard - Admin & Sub-admin */}
-                {isStaff && (
+                {/* {isStaff && (
                   <Link
                     href="/dashboard"
                     onClick={closeMenus}
@@ -171,7 +171,7 @@ export default function Navbar() {
                   >
                     Dashboard
                   </Link>
-                )}
+                )} */}
 
                 {/* My Bookings - Normal User */}
                 {!isStaff && (
@@ -354,7 +354,6 @@ export default function Navbar() {
 
           <div className="mx-auto flex max-w-7xl flex-col gap-1">
 
-            {/* Public Navigation */}
             <Link
               href="/"
               onClick={closeMenus}
@@ -387,12 +386,9 @@ export default function Navbar() {
               About Us
             </Link>
 
-            {/* Authentication Loading */}
             {isPending ? (
               <div className="my-3 h-12 animate-pulse rounded-xl bg-slate-100 dark:bg-slate-800" />
             ) : user ? (
-
-              /* Logged In Mobile User */
               <>
                 <div className="my-3 border-t border-slate-200 dark:border-slate-700" />
 

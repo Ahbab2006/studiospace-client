@@ -1,6 +1,4 @@
-
 "use client";
-
 import { useState } from "react";
 import { authClient } from "@/lib/auth-client";
 import { toast } from "react-toastify";
@@ -22,14 +20,13 @@ export default function AddStudioPage() {
   });
 
   const router = useRouter();
-
   const [loading, setLoading] = useState(false);
 
-const { data: session, isPending } = authClient.useSession();
+  const { data: session, isPending } = authClient.useSession();
 
-const canAddStudio =
-  session?.user?.role === "admin" ||
-  session?.user?.role === "sub-admin";
+  const canAddStudio =
+    session?.user?.role === "admin" ||
+    session?.user?.role === "sub-admin";
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -47,34 +44,32 @@ const canAddStudio =
       toast.error("Please login before adding a studio.");
       return;
     }
-
     setLoading(true);
 
-    
 
-try {
-const tokenData = await authClient.token();
-const token = tokenData?.data?.token;
+    try {
+      const tokenData = await authClient.token();
+      const token = tokenData?.data?.token;
 
-if (!token) {
-  throw new Error("Authentication token not found.");
-}
+      if (!token) {
+        throw new Error("Authentication token not found.");
+      }
 
-const response = await fetch(
-  `${process.env.NEXT_PUBLIC_API_URL}/studios`,
-  {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify({
-      ...formData,
-      hostEmail: session?.user?.email,
-      hostName: session?.user?.name,
-    }),
-  }
-);
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/studios`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            ...formData,
+            hostEmail: session?.user?.email,
+            hostName: session?.user?.name,
+          }),
+        }
+      );
 
       const result = await response.json();
 
@@ -82,9 +77,9 @@ const response = await fetch(
         throw new Error(result.message || "Failed to add studio");
       }
 
-    toast.success("Studio added successfully!");
+      toast.success("Studio added successfully!");
 
-router.push("/my-listings");
+      router.push("/my-listings");
 
       setFormData({
         title: "",
@@ -114,35 +109,34 @@ router.push("/my-listings");
     "mb-2 block font-semibold text-slate-700 dark:text-slate-200";
 
 
-    if (isPending) {
-  return (
-    <div className="flex min-h-screen items-center justify-center dark:bg-slate-950">
-      <p className="text-lg font-semibold text-slate-600 dark:text-white">
-        Checking permissions...
-      </p>
-    </div>
-  );
-}
+  if (isPending) {
+    return (
+      <div className="flex min-h-screen items-center justify-center dark:bg-slate-950">
+        <p className="text-lg font-semibold text-slate-600 dark:text-white">
+          Checking permissions...
+        </p>
+      </div>
+    );
+  }
 
-if (!session?.user || !canAddStudio) {
-  return (
-    <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-slate-50 px-4 dark:bg-slate-950">
-      <h1 className="text-2xl font-bold text-red-600">
-        Access Denied!
-      </h1>
-      <p className="text-center text-slate-600 dark:text-slate-300">
-        Only Admin and Sub-admin can add studios.
-      </p>
-      <button
-        onClick={() => router.push("/")}
-        className="rounded-lg bg-blue-600 px-5 py-2 text-white hover:bg-blue-700"
-      >
-        Back to Home
-      </button>
-    </div>
-  );
-}
-
+  if (!session?.user || !canAddStudio) {
+    return (
+      <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-slate-50 px-4 dark:bg-slate-950">
+        <h1 className="text-2xl font-bold text-red-600">
+          Access Denied!
+        </h1>
+        <p className="text-center text-slate-600 dark:text-slate-300">
+          Only Admin and Sub-admin can add studios.
+        </p>
+        <button
+          onClick={() => router.push("/")}
+          className="rounded-lg bg-blue-600 px-5 py-2 text-white hover:bg-blue-700"
+        >
+          Back to Home
+        </button>
+      </div>
+    );
+  }
 
   return (
     <main className="min-h-screen bg-slate-50 px-4 py-12 transition-colors duration-300 dark:bg-slate-950 sm:px-6">
@@ -159,13 +153,11 @@ if (!session?.user || !canAddStudio) {
           </p>
         </div>
 
-        {/* Form */}
         <form
           onSubmit={handleSubmit}
           className="space-y-6 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900 sm:p-8"
         >
 
-          {/* Studio Title */}
           <div>
             <label className={labelClass}>
               Studio Title
@@ -182,7 +174,6 @@ if (!session?.user || !canAddStudio) {
             />
           </div>
 
-          {/* Category */}
           <div>
             <label className={labelClass}>
               Category
@@ -204,7 +195,6 @@ if (!session?.user || !canAddStudio) {
             </select>
           </div>
 
-          {/* Pricing */}
           <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
             <div>
               <label className={labelClass}>
@@ -241,7 +231,6 @@ if (!session?.user || !canAddStudio) {
             </div>
           </div>
 
-          {/* Maximum Capacity */}
           <div>
             <label className={labelClass}>
               Maximum Capacity
@@ -259,7 +248,6 @@ if (!session?.user || !canAddStudio) {
             />
           </div>
 
-          {/* Opening and Closing Time */}
           <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
             <div>
               <label className={labelClass}>
@@ -292,7 +280,6 @@ if (!session?.user || !canAddStudio) {
             </div>
           </div>
 
-          {/* Location */}
           <div>
             <label className={labelClass}>
               Location / Address
@@ -309,7 +296,6 @@ if (!session?.user || !canAddStudio) {
             />
           </div>
 
-          {/* Image URL */}
           <div>
             <label className={labelClass}>
               Studio Image URL
@@ -326,7 +312,6 @@ if (!session?.user || !canAddStudio) {
             />
           </div>
 
-          {/* Amenities */}
           <div>
             <label className={labelClass}>
               Amenities
@@ -347,7 +332,6 @@ if (!session?.user || !canAddStudio) {
             </p>
           </div>
 
-          {/* Studio Overview */}
           <div>
             <label className={labelClass}>
               Studio Overview
@@ -364,7 +348,6 @@ if (!session?.user || !canAddStudio) {
             />
           </div>
 
-          {/* Submit Button */}
           <button
             type="submit"
             disabled={loading}
