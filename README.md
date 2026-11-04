@@ -1,36 +1,150 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# StudioSpace — Studio Booking Platform
 
-## Getting Started
+StudioSpace is a modern studio booking platform where users can explore studios, view details, and book suitable spaces for their creative projects. Studio owners can manage their studio listings, while administrators can manage platform activities through role-based access control.
 
-First, run the development server:
+## 🌐 Live Website
+
+**Live Demo:** https://studiospace-client-9p5k.vercel.app/
+
+## ✨ Key Features
+
+- **User Authentication:** Secure registration and login powered by Better Auth.
+- **Explore Studios:** Browse available studios and discover suitable spaces.
+- **Search & Filter:** Find studios based on different criteria and categories.
+- **Featured Studios:** Discover recently added or featured studio listings.
+- **Studio Details:** View detailed information about individual studios.
+- **Studio Management:** Add, edit, and delete studio listings.
+- **My Listings:** Manage your own studio listings from a dedicated page.
+- **Studio Booking:** Book studios and manage personal bookings.
+- **User Dashboard:** Access relevant account and platform information.
+- **Profile Management:** View and update user profile information.
+- **Role-Based Access Control:** Support for Admin, Sub-admin, and regular User roles.
+- **Responsive Design:** Optimized for desktop, tablet, and mobile devices.
+- **Dark & Light Mode:** Switch between different visual themes.
+
+## 🛠️ Technologies Used
+
+### Frontend
+- Next.js
+- React.js
+- JavaScript
+- Tailwind CSS
+- React Icons
+- React Toastify
+- Next Themes
+
+### Authentication
+- Better Auth
+- JWT Authentication
+- Role-Based Access Control (RBAC)
+
+### Backend & Database
+- Node.js
+- Express.js
+- MongoDB
+
+### Deployment
+- Vercel — Frontend Hosting
+- Render — Backend Hosting
+- MongoDB Atlas — Database Hosting
+
+## 📦 Installation & Setup
+
+Follow these steps to run the client application locally.
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/Ahbab2006/studiospace-client
+```
+
+### 2. Navigate to the Project Directory
+
+```bash
+cd studiospace-client
+```
+
+### 3. Install Dependencies
+
+```bash
+npm install
+```
+
+### 4. Configure Environment Variables
+
+Create a `.env.local` file in the root directory and add the following variables:
+
+```env
+BETTER_AUTH_URL=http://localhost:3000
+BETTER_AUTH_SECRET=your_better_auth_secret
+MONGODB_URI=your_mongodb_connection_string
+NEXT_PUBLIC_API_URL=http://localhost:5000/api
+GOOGLE_CLIENT_ID=your_google_client_id
+GOOGLE_CLIENT_SECRET=your_google_client_secret
+```
+
+**Important:** Replace the placeholder values with your actual credentials. Never commit your environment variables or secret credentials to GitHub.
+
+### 5. Start the Development Server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open your browser and visit:
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+```text
+http://localhost:3000
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🔐 User Roles & Permissions
 
-## Learn More
+StudioSpace uses role-based access control to manage platform access.
 
-To learn more about Next.js, take a look at the following resources:
+| Role | Access |
+|---|---|
+| Admin | Full administrative access |
+| Sub-admin | Access to assigned permissions |
+| User | Browse studios and manage personal bookings |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 📁 Project Structure
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```text
+studiospace-client/
+│
+├── public/
+│
+├── src/
+│   ├── app/
+│   │   ├── api/
+│   │   ├── login/
+│   │   ├── register/
+│   │   ├── dashboard/
+│   │   ├── my-listings/
+│   │   ├── my-bookings/
+│   │   ├── add-studio/
+│   │   ├── edit-studio/
+│   │   └── page.js
+│   │
+│   ├── components/
+│   ├── lib/
+│   └── ...
+│
+├── .env.local
+├── package.json
+└── README.md
+```
 
-## Deploy on Vercel
+## 🔗 Backend Repository
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+The backend is maintained in a separate repository and provides REST API services for studio management, bookings, and database operations.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+**Backend:** Express.js + MongoDB
+
+## 🎯 Project Goal
+
+The goal of StudioSpace is to make studio discovery and booking easier by providing a centralized platform for users, studio owners, and administrators.
+
+---
+
+**Developed with ❤️ using Next.js, React, Node.js, Express.js, and MongoDB.**
