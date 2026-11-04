@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect } from "react";
@@ -10,6 +9,7 @@ import { authClient } from "@/lib/auth-client";
 export default function Navbar() {
   const router = useRouter();
 
+  // Theme
   const { theme, resolvedTheme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
@@ -22,9 +22,11 @@ export default function Navbar() {
     setTheme(currentTheme === "dark" ? "light" : "dark");
   };
 
+  // Menu states
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
+  // Authentication
   const { data: session, isPending } = authClient.useSession();
   const user = session?.user;
 
@@ -32,6 +34,13 @@ export default function Navbar() {
   const isSubAdmin = user?.role === "sub-admin";
   const isStaff = isAdmin || isSubAdmin;
 
+  // Close menus
+  const closeMenus = () => {
+    setDropdownOpen(false);
+    setMobileMenuOpen(false);
+  };
+
+  // Logout
   const handleLogout = async () => {
     const { error } = await authClient.signOut();
 
@@ -40,20 +49,24 @@ export default function Navbar() {
       return;
     }
 
-    setDropdownOpen(false);
-    setMobileMenuOpen(false);
+    closeMenus();
     router.push("/login");
     router.refresh();
   };
 
-  const closeMenus = () => {
-    setDropdownOpen(false);
-    setMobileMenuOpen(false);
-  };
+  // Profile image fallback
+  const userInitial = user?.name?.charAt(0).toUpperCase() || "U";
+
+  const linkClass =
+    "block rounded-xl px-3 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-blue-50 hover:text-blue-700 dark:text-slate-200 dark:hover:bg-slate-800 dark:hover:text-blue-400";
+
+  const mobileLinkClass =
+    "rounded-lg px-4 py-3 text-sm font-semibold text-slate-700 transition hover:bg-blue-50 hover:text-blue-700 dark:text-slate-200 dark:hover:bg-slate-800 dark:hover:text-blue-400";
 
   return (
     <nav className="sticky top-0 z-50 border-b border-slate-200/80 bg-white/95 shadow-sm backdrop-blur-xl transition-colors dark:border-slate-700 dark:bg-slate-950/95">
 
+      {/* Main Navbar */}
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
 
         {/* Logo */}
@@ -82,6 +95,7 @@ export default function Navbar() {
 
           <Link
             href="/"
+            onClick={closeMenus}
             className="text-sm font-semibold text-slate-600 transition hover:text-blue-600 dark:text-slate-300 dark:hover:text-blue-400"
           >
             Home
@@ -89,6 +103,7 @@ export default function Navbar() {
 
           <Link
             href="/studios"
+            onClick={closeMenus}
             className="text-sm font-semibold text-slate-600 transition hover:text-blue-600 dark:text-slate-300 dark:hover:text-blue-400"
           >
             Explore Studios
@@ -96,6 +111,7 @@ export default function Navbar() {
 
           <Link
             href="/#how-it-works"
+            onClick={closeMenus}
             className="text-sm font-semibold text-slate-600 transition hover:text-blue-600 dark:text-slate-300 dark:hover:text-blue-400"
           >
             How It Works
@@ -103,6 +119,7 @@ export default function Navbar() {
 
           <Link
             href="/#about"
+            onClick={closeMenus}
             className="text-sm font-semibold text-slate-600 transition hover:text-blue-600 dark:text-slate-300 dark:hover:text-blue-400"
           >
             About Us
@@ -134,47 +151,46 @@ export default function Navbar() {
             )}
           </button>
 
+          {/* Authentication Loading */}
           {isPending ? (
             <div className="h-10 w-24 animate-pulse rounded-lg bg-slate-100 dark:bg-slate-800" />
           ) : user ? (
 
+            /* Logged In User */
             <div className="relative">
 
-              {/* Dashboard + Profile */}
+              {/* Desktop User Menu */}
               <div className="hidden items-center gap-3 sm:flex">
 
+                {/* Dashboard - Admin & Sub-admin */}
                 {isStaff && (
                   <Link
                     href="/dashboard"
                     onClick={closeMenus}
-                    className="block rounded-xl px-3 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-blue-50 hover:text-blue-700 dark:text-slate-200 dark:hover:bg-slate-800 dark:hover:text-blue-400"
+                    className={linkClass}
                   >
                     Dashboard
                   </Link>
                 )}
 
+                {/* My Bookings - Normal User */}
                 {!isStaff && (
                   <Link
                     href="/my-bookings"
                     onClick={closeMenus}
-                    className="block rounded-xl px-3 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-blue-50 hover:text-blue-700 dark:text-slate-200 dark:hover:bg-slate-800 dark:hover:text-blue-400"
+                    className={linkClass}
                   >
                     My Bookings
                   </Link>
                 )}
 
-                {/* <Link
-                  href="/profile"
-                  onClick={closeMenus}
-                  className="block rounded-xl px-3 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-blue-50 hover:text-blue-700 dark:text-slate-200 dark:hover:bg-slate-800 dark:hover:text-blue-400"
-                >
-                  My Profile
-                </Link> */}
-
+                {/* Profile Button */}
                 <button
                   onClick={() => setDropdownOpen(!dropdownOpen)}
+                  aria-expanded={dropdownOpen}
                   className="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-2.5 py-2 transition hover:border-blue-300 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700"
                 >
+
                   {user.image ? (
                     <img
                       src={user.image}
@@ -183,7 +199,7 @@ export default function Navbar() {
                     />
                   ) : (
                     <div className="flex h-9 w-9 items-center justify-center rounded-full bg-blue-100 font-bold text-blue-700">
-                      {user.name?.charAt(0).toUpperCase() || "U"}
+                      {userInitial}
                     </div>
                   )}
 
@@ -194,14 +210,16 @@ export default function Navbar() {
                   <span className="text-xs text-slate-500 dark:text-slate-400">
                     {dropdownOpen ? "▲" : "▼"}
                   </span>
+
                 </button>
 
               </div>
 
               {/* Profile Dropdown */}
               {dropdownOpen && (
-                <div className="absolute right-0 mt-3 w-64 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xl shadow-slate-900/10 dark:border-slate-700 dark:bg-slate-900">
+                <div className="absolute right-0 top-full z-50 mt-3 w-64 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xl shadow-slate-900/10 dark:border-slate-700 dark:bg-slate-900">
 
+                  {/* User Information */}
                   <div className="bg-gradient-to-r from-blue-600 to-blue-500 px-4 py-5 text-white">
 
                     <div className="flex items-center gap-3">
@@ -214,12 +232,15 @@ export default function Navbar() {
                         />
                       ) : (
                         <div className="flex h-11 w-11 items-center justify-center rounded-full bg-white/20 text-lg font-bold">
-                          {user.name?.charAt(0).toUpperCase() || "U"}
+                          {userInitial}
                         </div>
                       )}
 
                       <div className="min-w-0">
-                        <p className="truncate font-bold">{user.name}</p>
+                        <p className="truncate font-bold">
+                          {user.name}
+                        </p>
+
                         <p className="truncate text-xs text-blue-100">
                           {user.email}
                         </p>
@@ -228,13 +249,14 @@ export default function Navbar() {
                     </div>
                   </div>
 
+                  {/* Dropdown Links */}
                   <div className="p-2">
 
                     {/* My Profile */}
                     <Link
                       href="/profile"
                       onClick={closeMenus}
-                      className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-blue-50 hover:text-blue-700 dark:text-slate-200 dark:hover:bg-slate-800 dark:hover:text-blue-400"
+                      className={linkClass + " flex items-center gap-3"}
                     >
                       <span className="text-lg">👤</span>
                       My Profile
@@ -245,7 +267,7 @@ export default function Navbar() {
                       <Link
                         href="/dashboard"
                         onClick={closeMenus}
-                        className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-blue-50 hover:text-blue-700 dark:text-slate-200 dark:hover:bg-slate-800 dark:hover:text-blue-400"
+                        className={linkClass + " flex items-center gap-3"}
                       >
                         <span className="text-lg">📊</span>
                         Dashboard
@@ -257,12 +279,22 @@ export default function Navbar() {
                       <Link
                         href="/my-bookings"
                         onClick={closeMenus}
-                        className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-blue-50 hover:text-blue-700 dark:text-slate-200 dark:hover:bg-slate-800 dark:hover:text-blue-400"
+                        className={linkClass + " flex items-center gap-3"}
                       >
                         <span className="text-lg">📅</span>
                         My Bookings
                       </Link>
                     )}
+
+                    {/* My Listings - Everyone */}
+                    <Link
+                      href="/my-listings"
+                      onClick={closeMenus}
+                      className={linkClass + " flex items-center gap-3"}
+                    >
+                      <span className="text-lg">🏢</span>
+                      My Listings
+                    </Link>
 
                     <div className="my-2 border-t border-slate-100 dark:border-slate-700" />
 
@@ -283,6 +315,7 @@ export default function Navbar() {
 
           ) : (
 
+            /* Guest Desktop Navigation */
             <div className="hidden items-center gap-3 sm:flex">
 
               <Link
@@ -305,8 +338,9 @@ export default function Navbar() {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 text-xl text-slate-700 transition hover:bg-slate-100 dark:border-slate-700 dark:text-white dark:hover:bg-slate-800 lg:hidden"
+            aria-expanded={mobileMenuOpen}
             aria-label="Toggle navigation menu"
+            className="flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 text-xl text-slate-700 transition hover:bg-slate-100 dark:border-slate-700 dark:text-white dark:hover:bg-slate-800 lg:hidden"
           >
             {mobileMenuOpen ? "✕" : "☰"}
           </button>
@@ -314,7 +348,6 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Mobile Navigation */}
       {/* Mobile Navigation */}
       {mobileMenuOpen && (
         <div className="border-t border-slate-200 bg-white px-4 py-4 shadow-lg dark:border-slate-700 dark:bg-slate-950 lg:hidden">
@@ -325,7 +358,7 @@ export default function Navbar() {
             <Link
               href="/"
               onClick={closeMenus}
-              className="rounded-lg px-4 py-3 text-sm font-semibold text-slate-700 transition hover:bg-blue-50 hover:text-blue-700 dark:text-slate-200 dark:hover:bg-slate-800 dark:hover:text-blue-400"
+              className={mobileLinkClass}
             >
               Home
             </Link>
@@ -333,7 +366,7 @@ export default function Navbar() {
             <Link
               href="/studios"
               onClick={closeMenus}
-              className="rounded-lg px-4 py-3 text-sm font-semibold text-slate-700 transition hover:bg-blue-50 hover:text-blue-700 dark:text-slate-200 dark:hover:bg-slate-800 dark:hover:text-blue-400"
+              className={mobileLinkClass}
             >
               Explore Studios
             </Link>
@@ -341,7 +374,7 @@ export default function Navbar() {
             <Link
               href="/#how-it-works"
               onClick={closeMenus}
-              className="rounded-lg px-4 py-3 text-sm font-semibold text-slate-700 transition hover:bg-blue-50 hover:text-blue-700 dark:text-slate-200 dark:hover:bg-slate-800 dark:hover:text-blue-400"
+              className={mobileLinkClass}
             >
               How It Works
             </Link>
@@ -349,13 +382,17 @@ export default function Navbar() {
             <Link
               href="/#about"
               onClick={closeMenus}
-              className="rounded-lg px-4 py-3 text-sm font-semibold text-slate-700 transition hover:bg-blue-50 hover:text-blue-700 dark:text-slate-200 dark:hover:bg-slate-800 dark:hover:text-blue-400"
+              className={mobileLinkClass}
             >
               About Us
             </Link>
 
-            {/* Logged In User */}
-            {user ? (
+            {/* Authentication Loading */}
+            {isPending ? (
+              <div className="my-3 h-12 animate-pulse rounded-xl bg-slate-100 dark:bg-slate-800" />
+            ) : user ? (
+
+              /* Logged In Mobile User */
               <>
                 <div className="my-3 border-t border-slate-200 dark:border-slate-700" />
 
@@ -370,7 +407,7 @@ export default function Navbar() {
                     />
                   ) : (
                     <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-blue-100 text-lg font-bold text-blue-700 dark:bg-blue-500/20 dark:text-blue-400">
-                      {user.name?.charAt(0).toUpperCase() || "U"}
+                      {userInitial}
                     </div>
                   )}
 
@@ -405,11 +442,20 @@ export default function Navbar() {
                   </Link>
                 )}
 
-                {/* My Profile - Everyone */}
+                {/* My Listings */}
+                <Link
+                  href="/my-listings"
+                  onClick={closeMenus}
+                  className={mobileLinkClass + " flex items-center gap-3"}
+                >
+                  🏢 My Listings
+                </Link>
+
+                {/* My Profile */}
                 <Link
                   href="/profile"
                   onClick={closeMenus}
-                  className="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold text-slate-700 transition hover:bg-blue-50 hover:text-blue-700 dark:text-slate-200 dark:hover:bg-slate-800 dark:hover:text-blue-400"
+                  className={mobileLinkClass + " flex items-center gap-3"}
                 >
                   👤 My Profile
                 </Link>
@@ -423,9 +469,10 @@ export default function Navbar() {
                 </button>
 
               </>
+
             ) : (
 
-              /* Guest Navigation */
+              /* Guest Mobile Navigation */
               <div className="mt-3 grid grid-cols-2 gap-3 border-t border-slate-200 pt-4 dark:border-slate-700">
 
                 <Link
@@ -450,6 +497,7 @@ export default function Navbar() {
           </div>
         </div>
       )}
+
     </nav>
   );
 }

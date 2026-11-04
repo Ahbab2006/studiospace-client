@@ -12,6 +12,17 @@ export default function StudiosPage() {
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("All");
 
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const selectedCategory = params.get("category");
+
+    if (selectedCategory) {
+      setCategory(selectedCategory);
+    }
+  }, []);
+
+
   useEffect(() => {
     const fetchStudios = async () => {
       try {
@@ -38,9 +49,16 @@ export default function StudiosPage() {
 
   const categories = [
     "All",
-    ...new Set(studios.map((studio) => studio.category).filter(Boolean)),
+    ...new Set([
+      ...studios.map((studio) => studio.category).filter(Boolean),
+      ...(category !== "All" ? [category] : []),
+    ]),
   ];
-
+  // console.log("Selected category:", category);
+  // console.log(
+  //   "Available categories:",
+  //   [...new Set(studios.map((studio) => studio.category))]
+  // );
   const filteredStudios = studios.filter((studio) => {
     const searchMatch =
       studio.title?.toLowerCase().includes(search.toLowerCase()) ||
@@ -51,6 +69,21 @@ export default function StudiosPage() {
 
     return searchMatch && categoryMatch;
   });
+
+
+
+// console.log("Selected:", category);
+// console.log(
+//   "Filtered:",
+//   studios
+//     .filter((studio) => studio.category === category)
+//     .map((studio) => ({
+//       title: studio.title,
+//       category: studio.category,
+//     }))
+// );
+
+
 
   if (loading) {
     return (
@@ -116,6 +149,11 @@ export default function StudiosPage() {
         </div>
 
         {/* No Studios Found */}
+
+        {/* <p className="mb-4 text-sm text-blue-600 dark:text-blue-400">
+  Selected: {category} | Showing {filteredStudios.length} of {studios.length} studios
+</p> */}
+
         {filteredStudios.length === 0 ? (
           <div className="rounded-2xl border border-gray-200 bg-white py-16 text-center shadow-sm dark:border-slate-800 dark:bg-slate-900">
             <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-blue-50 text-3xl dark:bg-blue-500/10">

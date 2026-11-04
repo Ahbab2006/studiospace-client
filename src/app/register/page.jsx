@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -18,12 +17,19 @@ export default function RegisterPage() {
   });
 
   const [loading, setLoading] = useState(false);
+  const [imageError, setImageError] = useState(false);
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value } = e.target;
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+
+    if (name === "image") {
+      setImageError(false);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -46,15 +52,21 @@ export default function RegisterPage() {
       return;
     }
 
+    // Prevent registration with an invalid image URL
+    if (image.trim() && imageError) {
+      toast.error("Please provide a valid profile photo URL.");
+      return;
+    }
+
     setLoading(true);
 
     try {
       const { data, error: authError } =
         await authClient.signUp.email({
-          name,
-          email,
+          name: name.trim(),
+          email: email.trim(),
           password,
-          image: image || undefined,
+          image: image.trim() || undefined,
         });
 
       if (authError) {
@@ -75,9 +87,12 @@ export default function RegisterPage() {
     }
   };
 
+  const initial = formData.name.trim().charAt(0).toUpperCase() || "U";
+
   return (
     <main className="flex min-h-screen items-center justify-center bg-gray-50 px-4 py-10 transition-colors duration-300 dark:bg-slate-950">
       <div className="w-full max-w-md rounded-2xl border border-gray-100 bg-white p-8 shadow-xl dark:border-slate-800 dark:bg-slate-900">
+
         {/* Header */}
         <div className="mb-7 text-center">
           <h1 className="mb-2 text-3xl font-bold text-gray-900 dark:text-white">
@@ -91,6 +106,7 @@ export default function RegisterPage() {
 
         {/* Register Form */}
         <form onSubmit={handleSubmit} className="space-y-5">
+
           {/* Name */}
           <div>
             <label
@@ -135,13 +151,13 @@ export default function RegisterPage() {
             />
           </div>
 
-          {/* Image URL */}
+          {/* Profile Photo */}
           <div>
             <label
               htmlFor="image"
               className="mb-2 block text-sm font-medium text-gray-700 dark:text-slate-300"
             >
-              Photo URL (Optional)
+              Profile Photo URL (Optional)
             </label>
 
             <input
@@ -153,7 +169,69 @@ export default function RegisterPage() {
               onChange={handleChange}
               className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:border-slate-700 dark:bg-slate-800 dark:text-white dark:placeholder:text-slate-500"
             />
+
+            <p className="mt-2 text-xs text-gray-500 dark:text-slate-400">
+              Paste an image URL to preview your profile photo.
+            </p>
           </div>
+
+          {/* Image Preview */}
+          {formData.image.trim() && (
+            <div className="rounded-xl border border-gray-200 bg-gray-50 p-4 dark:border-slate-700 dark:bg-slate-800">
+              <p className="mb-3 text-sm font-semibold text-gray-700 dark:text-slate-300">
+                Profile Photo Preview
+              </p>
+
+              <div className="flex items-center gap-4">
+                {!imageError ? (
+                  <img
+                    src={formData.image}
+                    alt="Profile preview"
+                    onError={() => setImageError(true)}
+                    onLoad={() => setImageError(false)}
+                    className="h-20 w-20 rounded-full border-4 border-white object-cover shadow-md dark:border-slate-700"
+                  />
+                ) : (
+                  <div className="flex h-20 w-20 items-center justify-center rounded-full bg-red-100 text-2xl text-red-600 dark:bg-red-500/10">
+                    !
+                  </div>
+                )}
+
+                <div>
+                  <p className="font-semibold text-gray-900 dark:text-white">
+                    {formData.name || "Your Name"}
+                  </p>
+
+                  <p className={`mt-1 text-xs ${
+                    imageError
+                      ? "text-red-500"
+                      : "text-green-600 dark:text-green-400"
+                  }`}>
+                    {imageError ? "Image could not be loaded" : "Photo preview"}
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Default Avatar Preview */}
+          {!formData.image.trim() && (
+            <div className="flex items-center gap-4 rounded-xl border border-gray-200 bg-gray-50 p-4 dark:border-slate-700 dark:bg-slate-800">
+              <div className="flex h-20 w-20 items-center justify-center rounded-full bg-blue-100 text-3xl font-bold text-blue-700 dark:bg-blue-500/20 dark:text-blue-400">
+                {initial}
+              </div>
+
+              <div>
+                <p className="font-semibold text-gray-900 dark:text-white">
+                  {formData.name || "Your Name"}
+                </p>
+
+                <p className="mt-1 text-xs text-gray-500 dark:text-slate-400">
+                  Default profile avatar
+                </p>
+              </div>
+            </div>
+          )}
 
           {/* Password */}
           <div>

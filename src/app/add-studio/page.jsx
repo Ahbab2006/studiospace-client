@@ -25,7 +25,11 @@ export default function AddStudioPage() {
 
   const [loading, setLoading] = useState(false);
 
-  const { data: session } = authClient.useSession();
+const { data: session, isPending } = authClient.useSession();
+
+const canAddStudio =
+  session?.user?.role === "admin" ||
+  session?.user?.role === "sub-admin";
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -108,6 +112,37 @@ router.push("/my-listings");
 
   const labelClass =
     "mb-2 block font-semibold text-slate-700 dark:text-slate-200";
+
+
+    if (isPending) {
+  return (
+    <div className="flex min-h-screen items-center justify-center dark:bg-slate-950">
+      <p className="text-lg font-semibold text-slate-600 dark:text-white">
+        Checking permissions...
+      </p>
+    </div>
+  );
+}
+
+if (!session?.user || !canAddStudio) {
+  return (
+    <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-slate-50 px-4 dark:bg-slate-950">
+      <h1 className="text-2xl font-bold text-red-600">
+        Access Denied!
+      </h1>
+      <p className="text-center text-slate-600 dark:text-slate-300">
+        Only Admin and Sub-admin can add studios.
+      </p>
+      <button
+        onClick={() => router.push("/")}
+        className="rounded-lg bg-blue-600 px-5 py-2 text-white hover:bg-blue-700"
+      >
+        Back to Home
+      </button>
+    </div>
+  );
+}
+
 
   return (
     <main className="min-h-screen bg-slate-50 px-4 py-12 transition-colors duration-300 dark:bg-slate-950 sm:px-6">

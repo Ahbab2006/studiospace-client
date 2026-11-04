@@ -11,6 +11,10 @@ const API_URL =
 
 export default function MyListingsPage() {
     const { data: session, isPending } = authClient.useSession();
+    const canAddStudio =
+    session?.user?.role === "admin" ||
+    (session?.user?.role === "sub-admin" &&
+        session?.user?.permissions?.manageStudios === true);
 
     const [studios, setStudios] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -193,12 +197,14 @@ export default function MyListingsPage() {
                         </p>
                     </div>
 
-                    <Link
-                        href="/add-studio"
-                        className="inline-flex items-center justify-center rounded-xl bg-blue-600 px-6 py-3 font-semibold text-white transition hover:bg-blue-700"
-                    >
-                        + Add New Studio
-                    </Link>
+                 {canAddStudio && (
+    <Link
+        href="/add-studio"
+        className="inline-flex items-center justify-center rounded-xl bg-blue-600 px-6 py-3 font-semibold text-white transition hover:bg-blue-700"
+    >
+        + Add New Studio
+    </Link>
+)}
                 </div>
 
                 {/* Studio Count */}
@@ -228,12 +234,14 @@ export default function MyListingsPage() {
                             creating your first studio listing.
                         </p>
 
-                        <Link
-                            href="/add-studio"
-                            className="mt-7 inline-block rounded-xl bg-blue-600 px-6 py-3 font-semibold text-white transition hover:bg-blue-700"
-                        >
-                            Add Your First Studio
-                        </Link>
+                    {canAddStudio && (
+    <Link
+        href="/add-studio"
+        className="mt-7 inline-block rounded-xl bg-blue-600 px-6 py-3 font-semibold text-white transition hover:bg-blue-700"
+    >
+        Add Your First Studio
+    </Link>
+)}
                     </div>
                 ) : (
                     /* Studio Cards */
